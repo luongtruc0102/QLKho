@@ -41,21 +41,28 @@ export default function DetailStockIn() {
   });
 
   useEffect(() => {
-    if (id) {
-      axios
-        .get<StockIn>(`http://localhost:4001/stock-in/${id}`)
-        .then((res) => setFormData(res.data));
-    }
+    if (!id) return;
 
-    axios
-      .get<Product[]>("http://localhost:4001/products")
-      .then((res) => setProducts(res.data));
-    axios
-      .get<Warehouse[]>("http://localhost:4001/warehouses")
-      .then((res) => setWarehouses(res.data));
-    axios
-      .get<Manufacturer[]>("http://localhost:4001/manufacturers")
-      .then((res) => setManufacturers(res.data));
+    const fetchData = async () => {
+      try {
+        const [stockRes, productsRes, warehousesRes, manufacturersRes] =
+          await Promise.all([
+            axios.get<StockIn>(`http://localhost:4001/stock-in/${id}`),
+            axios.get<Product[]>("http://localhost:4001/products"),
+            axios.get<Warehouse[]>("http://localhost:4001/warehouses"),
+            axios.get<Manufacturer[]>("http://localhost:4001/manufacturers"),
+          ]);
+
+        setProducts(productsRes.data);
+        setWarehouses(warehousesRes.data);
+        setManufacturers(manufacturersRes.data);
+        setFormData(stockRes.data); // ✅ set sau khi options load xong
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
   }, [id]);
 
   const handleChange = (
@@ -88,7 +95,7 @@ export default function DetailStockIn() {
     <div className="container max-w-[600px] mx-auto mt-[32px]">
       <section className="bg-[#ffffff] rounded-[16px] shadow p-[24px]">
         <h1 className="text-center text-[24px] font-[600] mb-[24px] text-[#7B68EE]">
-          Sửa phiếu nhập kho
+          Sửa phiếu nhập kho: {formData.stock_in_id || id}
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-[16px]">

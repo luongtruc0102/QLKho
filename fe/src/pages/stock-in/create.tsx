@@ -70,7 +70,7 @@ export default function CreateStockIn() {
 
       await axios.post("http://localhost:4001/stock-in", payload);
       alert("Tạo phiếu nhập thành công!");
-      router.push("/stock-in"); // Quay về danh sách
+      router.push("/stock-in/StockInPage"); // Quay về danh sách
     } catch (err) {
       console.error(err);
       alert("Có lỗi xảy ra!");
@@ -78,52 +78,35 @@ export default function CreateStockIn() {
   };
 
   return (
-    <div className="container min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 flex flex-col justify-center items-center p-[8px]">
-      <div className="w-full max-w-[768px] rounded-[8px] shadow-[8px] border-[0] overflow-hidden">
-        {/* Header với gradient */}
-        <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] p-[12px] text-[#fff]">
-          <button
-            className="btn bg-transparent text-[#fff] flex items-center gap-[5px]"
-            onClick={() => router.push("/stock-in/StockInPage")}
-            type="button"
-          >
-            <ArrowLeft />
-            Quay lại
-          </button>
-          <h2 className="text-[28px] text-center">
-            Tạo phiếu nhập kho
-          </h2>
-          <p className="text-center text-[#fff]/80">
-            Nhập thông tin chi tiết để tạo phiếu nhập kho mới
-          </p>
-        </div>
+    <div className="max-w-lg mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+      {/* Button Quay lại */}
+      <button
+        className="mb-4 bg-gray-300 text-black px-3 py-2 rounded hover:bg-gray-400"
+        onClick={() => router.push("/stock-in/StockInPage")}
+      >
+        ← Quay lại
+      </button>
 
-        {/* Form content */}
-        <div className="p-[12px]">
-          <form className="space-y-[16px]" onSubmit={handleSubmit}>
-            {/* Chọn sản phẩm */}
-            <div className="group">
-              <label className="block text-[14px] font-[600] text-[#374151] mb-[8px] group-focus-within:text-[#7B68EE] transition-colors">
-                <span className="flex items-center gap-[5px]">
-                  <Box />
-                  Sản phẩm <span className="text-[#ef4444] ml-[4px]">*</span>
-                </span>
-              </label>
-              <select
-                name="product_id"
-                value={formData.product_id}
-                onChange={handleChange}
-                className="w-full p-[16px] text-[#374151] bg-[#f9fafb] border-[2px] border-[#e5e7eb] rounded-[12px] focus:border-[#7B68EE] focus:bg-[#fff] focus:ring-[4px] focus:ring-[#7B68EE1A] transition-all duration-[200ms] outline-none"
-                required
-              >
-                <option value="">-- Chọn sản phẩm --</option>
-                {products.map((p) => (
-                  <option key={p.product_id} value={p.product_id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+      <h2 className="text-2xl font-bold mb-4">Tạo phiếu nhập kho</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Chọn sản phẩm */}
+        <div>
+          <label className="block mb-1 font-medium">Sản phẩm</label>
+          <select
+            name="product_id"
+            value={formData.product_id}
+            onChange={handleChange}
+            className="w-full border rounded p-2"
+            required
+          >
+            <option value="">-- Chọn sản phẩm --</option>
+            {products.map((p) => (
+              <option key={p.product_id} value={p.product_id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+        </div>
 
             {/* Số lượng và Kho - 2 cột */}
             <div className="flex md:flex-cols-2 justify-between gap-[48px]">

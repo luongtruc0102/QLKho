@@ -1,9 +1,12 @@
 // D:\QLKho\fe\src/types.ts
 export interface InventoryItem {
-  product: string;
+  warehouse_id: number;
   warehouse: string;
+  product_id: number;
+  product: string;
   quantity: number;
 }
+
 
 export interface StockInItem {
   stock_in_id: number;
@@ -27,6 +30,20 @@ export interface AlertItem {
   product: string;
   warehouse: string;
   quantity: number;
+}
+
+// types.ts
+export interface SubWarehouseSummary {
+  warehouse_id: number;
+  warehouse: string;
+  total: number;
+}
+
+export interface InventorySummary {
+  warehouse_id: number;
+  warehouse: string;
+  total: number;
+  sub_warehouses: SubWarehouseSummary[];
 }
 
 export interface TotalInventoryItem {

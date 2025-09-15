@@ -23,6 +23,8 @@ export default function StockInPage() {
   const [debouncedSearch, setDebouncedSearch] = useState(search);
   const [sort, setSort] = useState<"asc" | "desc">("desc");
 
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
   // Phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -42,7 +44,8 @@ export default function StockInPage() {
       if (!res.ok) throw new Error("Failed to fetch data");
       const data: StockInItem[] = await res.json();
       setStockIns(data);
-      setCurrentPage(1); // reset page khi search/sort
+      setCurrentPage(1);
+      setSelectedIds([]);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -64,6 +67,25 @@ export default function StockInPage() {
       alert("Xóa thất bại");
     } else {
       setStockIns(stockIns.filter((s) => s.stock_in_id !== id));
+      setSelectedIds(selectedIds.filter((sid) => sid !== id));
+    }
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) return alert("Chưa chọn phiếu nào");
+    if (!confirm(`Bạn có chắc muốn xóa ${selectedIds.length} phiếu nhập này?`))
+      return;
+
+    try {
+      await Promise.all(
+        selectedIds.map((id) =>
+          fetch(`http://localhost:4001/stock-in/${id}`, { method: "DELETE" })
+        )
+      );
+      setStockIns(stockIns.filter((s) => !selectedIds.includes(s.stock_in_id)));
+      setSelectedIds([]);
+    } catch (err) {
+      alert("Xóa thất bại");
     }
   };
 
@@ -79,23 +101,46 @@ export default function StockInPage() {
   };
 
   const renderPageNumbers = () => {
-    const pageNumbers = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pageNumbers.push(
+    const pageNumbers: (number | string)[] = [];
+    const maxPagesToShow = 2;
+    const total = totalPages;
+
+    if (total <= 4) {
+      for (let i = 1; i <= total; i++) pageNumbers.push(i);
+    } else {
+      pageNumbers.push(1);
+
+      if (currentPage > maxPagesToShow + 1) pageNumbers.push("...");
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(total - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) pageNumbers.push(i);
+
+      if (currentPage < total - maxPagesToShow) pageNumbers.push("...");
+
+      pageNumbers.push(total);
+    }
+
+    return pageNumbers.map((p, idx) =>
+      p === "..." ? (
+        <span key={idx} className="px-2">
+          ...
+        </span>
+      ) : (
         <button
-          key={i}
-          onClick={() => handlePageChange(i)}
+          key={idx}
+          onClick={() => handlePageChange(Number(p))}
           className={`w-[36px] h-[36px] flex items-center justify-center rounded-[8px] transition-all ${
-            i === currentPage
+            Number(p) === currentPage
               ? "bg-[#7B68EE] text-[#ffffff] font-[600]"
               : "text-[#333333] font-[500] hover:bg-[#F3E8FF] hover:text-[#7B68EE]"
           }`}
         >
-          {i}
+          {p}
         </button>
-      );
-    }
-    return pageNumbers;
+      )
+    );
   };
 
   if (loading) return <p className="p-[12px] text-[16px] text-[#333333]">Loading...</p>;
@@ -113,7 +158,17 @@ export default function StockInPage() {
         </h1>
       </div>
 
-      {/* Search & Sort & Add */}
+      {/* Nút quay lại */}
+      <div className="mb-[20px]">
+        <button
+          className="bg-gray-300 text-black px-3 py-2 rounded hover:bg-gray-400 transition-colors"
+          onClick={() => router.push("/")}
+        >
+          ← Quay lại
+        </button>
+      </div>
+
+      {/* Search & Sort & Add & Delete Selected */}
       <div className="flex gap-[20px] mb-[20px]">
         <input
           type="text"
@@ -135,6 +190,12 @@ export default function StockInPage() {
         >
           <Plus size={20} className="mr-[6px] text-[#ffffff]" /> Thêm phiếu nhập
         </button>
+        <button
+          className="bg-red-500 text-white px-3 py-2 rounded"
+          onClick={handleDeleteSelected}
+        >
+          Xóa phiếu đã chọn
+        </button>
       </div>
 
       {/* Table */}
@@ -142,6 +203,22 @@ export default function StockInPage() {
         <table className="w-full">
           <thead>
             <tr className="bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6]">
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[5%]">
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedIds.length === currentStockIns.length &&
+                    currentStockIns.length > 0
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedIds(currentStockIns.map((s) => s.stock_in_id));
+                    } else {
+                      setSelectedIds([]);
+                    }
+                  }}
+                />
+              </th>
               <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[6%]">
                 🆔 ID
               </th>
@@ -174,6 +251,21 @@ export default function StockInPage() {
                 key={s.stock_in_id}
                 className="border-b border-[#F3F4F6] transition-all hover:bg-gradient-to-r hover:from-[#EEF2FF] hover:to-[#F3E8FF]"
               >
+                <td className="text-center px-[16px] py-[12px]">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(s.stock_in_id)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelectedIds([...selectedIds, s.stock_in_id]);
+                      } else {
+                        setSelectedIds(
+                          selectedIds.filter((id) => id !== s.stock_in_id)
+                        );
+                      }
+                    }}
+                  />
+                </td>
                 <td className="text-center px-[16px] py-[12px] font-[500]">{s.stock_in_id}</td>
                 <td className="px-[16px] py-[12px] font-[500]">{s.product}</td>
                 <td className="px-[16px] py-[12px]">{s.warehouse ?? "-"}</td>

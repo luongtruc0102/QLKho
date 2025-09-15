@@ -62,6 +62,52 @@ export default function DashboardPage() {
         </Link>
       </div>
 
+      {/* Navigation buttons */}
+      <div className="mb-[28px] flex flex-wrap gap-[16px] justify-center">
+        <Link
+          href="/stock-out/StockOutPage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#DC2626] hover:bg-[#B91C1C] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(220,38,38,0.25)] transition-all"
+        >
+          <Plus size={18} className="mr-[6px] text-[#ffffff]" />
+          Tạo phiếu xuất kho
+        </Link>
+        
+        <Link
+          href="/inventory/inventoryPage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#16a34a] hover:bg-[#15803d] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(22,163,74,0.25)] transition-all"
+        >
+          📦 Xem tồn kho
+        </Link>
+        
+        <Link
+          href="/subWarehouse/subWarehousePage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#16a34a] hover:bg-[#15803d] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(22,163,74,0.25)] transition-all"
+        >
+          🏢 Kho con
+        </Link>
+        
+        <Link
+          href="/warehouse/warehousePage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#10b981] hover:bg-[#059669] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(16,185,129,0.25)] transition-all"
+        >
+          🏭 Danh sách kho
+        </Link>
+        
+        <Link
+          href="/warehouse-transfer/warehouseTransferPage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#f59e0b] hover:bg-[#d97706] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(245,158,11,0.25)] transition-all"
+        >
+          🔄 Chuyển kho
+        </Link>
+        
+        <Link
+          href="/report/monthly"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#3b82f6] hover:bg-[#2563eb] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(59,130,246,0.25)] transition-all"
+        >
+          📊 Xem báo cáo nhập/xuất theo tháng
+        </Link>
+      </div>
+
       {/* Các section */}
       <div className="flex flex-col gap-[28px]">
         {/* Tồn kho */}

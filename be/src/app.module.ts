@@ -15,7 +15,11 @@ import { StockInModule } from './stock-in/stock-in.module';
 import { ProductsModule } from './products/products.module';
 import { WarehousesModule } from './warehouses/warehouses.module';
 import { ManufacturersModule } from './manufacturers/manufacturers.module';
-
+import { StockOutModule } from './stock-out/stock-out.module'; 
+import { StoresModule } from './stores/stores.module';
+import { InventoryModule } from './inventory/inventory.module';
+import { SubWarehouseModule } from './sub-warehouse/sub-warehouse.module';
+import { WarehouseTransferModule } from './warehouse-transfer/warehouse-transfer.module';
 
 @Module({
   imports: [
@@ -42,9 +46,14 @@ import { ManufacturersModule } from './manufacturers/manufacturers.module';
     }),
     DashboardModule,
     StockInModule,
+    StockOutModule,
     ProductsModule,
     WarehousesModule,
     ManufacturersModule,
+    StoresModule,
+    InventoryModule,
+    SubWarehouseModule,
+    WarehouseTransferModule,
   ],
 })
 export class AppModule {}
