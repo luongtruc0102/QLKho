@@ -30,7 +30,7 @@ const InventoryPage = () => {
 
   if (loading)
     return (
-      <p className="text-center text-gray-500 mt-10 animate-pulse">
+      <p className="text-center text-[#6B7280] mt-[40px] text-[16px] animate-pulse">
         Đang tải dữ liệu...
       </p>
     );
@@ -68,166 +68,187 @@ const InventoryPage = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen font-sans">
+    <div className="min-h-screen bg-[#F9FAFB] p-[32px] font-sans">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800 flex items-center gap-2">
-          📦 Tồn kho
-        </h1>
-        <button
-          onClick={() => router.push("http://localhost:4000/")}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transform hover:scale-105 transition"
-        >
-          ⬅ Quay lại Dashboard
-        </button>
-      </div>
+      <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_24px_rgba(123,104,238,0.08)] border border-[#E5E7EB] overflow-hidden">
+        <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[32px] py-[24px] flex justify-between items-center">
+          <h1 className="text-[#fff] text-[24px] font-[700] flex items-center gap-[8px] m-0">
+            📦 Tồn kho
+          </h1>
+          <button
+            onClick={() => router.push("http://localhost:4000/")}
+            className="px-[20px] py-[12px] bg-[#7B68EE] text-[#fff] cursor-pointer rounded-[8px] font-[500] text-[14px] transition-all duration-200 hover:bg-[#6A5ACD] shadow-md"
+          >
+            ⬅ Quay lại trang chủ
+          </button>
+        </div>
 
-      {/* Search */}
-      <input
-        type="text"
-        placeholder="Tìm kiếm sản phẩm hoặc kho..."
-        value={searchTerm}
-        onChange={(e) => {
-          setSearchTerm(e.target.value);
-          setCurrentPage(1);
-        }}
-        className="w-full mb-6 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none shadow-sm transition"
-      />
+        {/* Search */}
+        <div className="p-[24px] border-b border-[#E5E7EB]">
+          <input
+            type="text"
+            placeholder="🔍 Tìm kiếm sản phẩm hoặc kho..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full h-[44px] px-[16px] text-[14px] rounded-[8px] border border-[#D1D5DB] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE] outline-none shadow-sm transition"
+          />
+        </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto shadow-xl rounded-xl bg-white animate-fadeIn">
-        <table className="min-w-full border-collapse rounded-xl overflow-hidden">
-          <thead className="bg-gradient-to-r from-blue-100 to-blue-200 sticky top-0 z-10">
-            <tr>
-              <th className="px-6 py-4 text-left text-gray-700 font-bold uppercase tracking-wider">
-                Tên sản phẩm
-              </th>
-              <th className="px-6 py-4 text-left text-gray-700 font-bold uppercase tracking-wider">
-                Kho
-              </th>
-              <th className="px-6 py-4 text-center text-gray-700 font-bold uppercase tracking-wider">
-                Số lượng hiện có
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentData.length > 0 ? (
-              currentData.map((item, index) => {
-                let color = "text-gray-800";
-                let icon = "✅";
+        {/* Table */}
+        <div className="p-[24px]">
+          <div className="overflow-x-auto rounded-[12px] border border-[#E5E7EB] shadow-[0_1px_4px_rgba(123,104,238,0.04)]">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6]">
+                  <th className="px-[24px] py-[16px] text-left text-[16px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D]">
+                    🏷️ Tên sản phẩm
+                  </th>
+                  <th className="px-[24px] py-[16px] text-left text-[16px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D]">
+                    🏪 Kho
+                  </th>
+                  <th className="px-[24px] py-[16px] text-center text-[16px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D]">
+                    📊 Số lượng hiện có
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentData.length > 0 ? (
+                  currentData.map((item, index) => {
+                    let color = "text-[#065F46] bg-[#D1FAE5]";
+                    let icon = "✅";
 
-                if (item.quantity === 0) {
-                  color = "text-red-600 font-bold";
-                  icon = "❌";
-                } else if (item.quantity < 50) {
-                  color = "text-yellow-600";
-                  icon = "⚠️";
-                } else {
-                  color = "text-green-600";
-                }
+                    if (item.quantity === 0) {
+                      color = "text-[#B91C1C] bg-[#FEE2E2]";
+                      icon = "❌";
+                    } else if (item.quantity < 50) {
+                      color = "text-[#92400E] bg-[#FEF3C7]";
+                      icon = "⚠️";
+                    }
 
-                return (
-                  <tr
-                    key={index}
-                    className={`transition duration-300 ease-in-out hover:bg-blue-50 hover:shadow-md ${
-                      index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                    }`}
-                  >
-                    <td className="px-6 py-4">{item.product}</td>
-                    <td className="px-6 py-4">{item.warehouse}</td>
-                    <td className={`px-6 py-4 text-center font-semibold ${color}`}>
-                      {item.quantity} {icon}
+                    return (
+                      <tr
+                        key={index}
+                        className="border-b border-[#F3F4F6] transition-all hover:bg-gradient-to-r hover:from-[#EEF2FF] hover:to-[#F3E8FF]"
+                      >
+                        <td className="px-[24px] py-[16px] text-[#1F2937] font-[500]">
+                          {item.product}
+                        </td>
+                        <td className="px-[24px] py-[16px]">
+                          <span className="inline-flex items-center px-[12px] py-[4px] rounded-full text-[14px] font-[500] bg-[#ede9fe] text-[#7B68EE]">
+                            {item.warehouse}
+                          </span>
+                        </td>
+                        <td className="px-[24px] py-[16px] text-center">
+                          <span
+                            className={`inline-flex items-center justify-center min-w-[60px] h-[32px] rounded-[8px] text-[14px] font-[500] ${color}`}
+                          >
+                            {item.quantity} {icon}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className="px-[24px] py-[16px] text-center text-[#6B7280]"
+                    >
+                      Không có dữ liệu tồn kho
                     </td>
                   </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={3} className="px-6 py-4 text-center text-gray-500">
-                  Không có dữ liệu tồn kho
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Pagination */}
-      <div className="flex flex-col md:flex-row justify-between items-center mt-6 gap-4">
-        <div className="flex items-center space-x-2">
-          <button
-            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-200 transition"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            &lt;
-          </button>
-
-          {renderPageNumbers().map((page, i) =>
-            page === "..." ? (
-              <span key={i} className="px-2 text-gray-500">
-                ...
-              </span>
-            ) : (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(page as number)}
-                className={`px-3 py-1 border rounded transition ${
-                  currentPage === page
-                    ? "bg-blue-500 text-white shadow-md"
-                    : "hover:bg-gray-200"
-                }`}
-              >
-                {page}
-              </button>
-            )
-          )}
-
-          <button
-            className="px-3 py-1 border rounded disabled:opacity-50 hover:bg-gray-200 transition"
-            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            &gt;
-          </button>
-        </div>
-
-        {/* Go to page */}
-        <div className="flex items-center space-x-2 text-sm">
-          <span>Đến trang</span>
-          <div className="flex items-center border rounded overflow-hidden">
-            <input
-              type="number"
-              value={gotoPage}
-              onChange={(e) => setGotoPage(e.target.value)}
-              className="w-16 px-2 py-1 outline-none"
-            />
-            <button
-              onClick={handleGotoPage}
-              className="px-3 py-1 bg-blue-500 text-white hover:bg-blue-600 transition"
-            >
-              OK
-            </button>
+                )}
+              </tbody>
+            </table>
           </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-[32px] flex flex-col items-center gap-[24px]">
+              {/* Page numbers */}
+              <div className="flex items-center gap-[8px]">
+                <button
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`px-[16px] py-[12px] rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
+                    ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-[#6A5ACD] cursor-pointer"}`}
+                >
+                  ⬅ Trang trước
+                </button>
+
+                {renderPageNumbers().map((page, i) =>
+                  page === "..." ? (
+                    <span key={i} className="px-[12px] text-[#9CA3AF]">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={i}
+                      onClick={() => setCurrentPage(page as number)}
+                      className={`w-[40px] h-[40px] rounded-[8px] text-[14px] font-[600] transition-all duration-200
+                        ${
+                          currentPage === page
+                            ? "bg-[#7B68EE] text-[#fff] shadow-lg"
+                            : "bg-[#fff] text-[#4B5563] border border-[#D1D5DB] hover:bg-[#F5F3FF] hover:border-[#7B68EE]"
+                        }`}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+
+                <button
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
+                  disabled={currentPage === totalPages}
+                  className={`px-[16px] py-[12px] rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
+                    ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-[#6A5ACD] cursor-pointer"
+                    }`}
+                >
+                  Trang sau ➡
+                </button>
+              </div>
+
+              {/* Go to page */}
+              <div className="flex items-center gap-[12px]">
+                <span className="text-[#4B5563] font-[500] text-[14px]">
+                  Đến trang
+                </span>
+                <input
+                  type="number"
+                  value={gotoPage}
+                  onChange={(e) => setGotoPage(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleGotoPage();
+                  }}
+                  className="w-[80px] h-[40px] text-[16px] text-center border-2 border-[#D1D5DB] rounded-[8px] focus:border-[#7B68EE] focus:outline-none transition-all duration-200"
+                  min={1}
+                  max={totalPages}
+                  placeholder="1"
+                />
+                <button
+                  onClick={handleGotoPage}
+                  className="px-[20px] py-[12px] bg-[#059669] text-[#fff] rounded-[8px] font-[500] text-[14px] transition-all duration-200 hover:bg-[#047857]"
+                >
+                  Đi
+                </button>
+              </div>
+
+              {/* Page info */}
+              <div className="text-[#6B7280] text-[12px]">
+                Trang {currentPage} / {totalPages} • Tổng {filteredData.length} sản phẩm
+              </div>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Tailwind animation */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.6s ease-out;
-        }
-      `}</style>
     </div>
   );
 };

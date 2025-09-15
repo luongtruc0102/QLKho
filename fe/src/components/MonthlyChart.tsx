@@ -48,13 +48,13 @@ const MonthlyChart: React.FC<MonthlyChartProps> = ({ data }) => {
         position: "top" as const,
         labels: {
           color: "#374151", // chữ legend màu xám đậm
-          font: { size: 14, weight: "500" as const },
+          font: { size: 14, weight: 500 as const },
         },
       },
       title: {
         display: true,
         text: "Tổng sản phẩm tồn kho hàng tháng",
-        font: { size: 18, weight: "600" as const },
+        font: { size: 18, weight: 600 as const },
         color: "#7B68EE", // tiêu đề màu tím
       },
     },
