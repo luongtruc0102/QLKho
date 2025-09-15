@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 
 export interface StockOutItem {
   stock_out_id: number;
@@ -130,11 +131,11 @@ export default function StockOutPage() {
         <button
           key={idx}
           onClick={() => handlePageChange(Number(p))}
-          style={{
-            padding: "3px 8px",
-            border: Number(p) === currentPage ? "1px solid blue" : "1px solid gray",
-            backgroundColor: Number(p) === currentPage ? "#e0f0ff" : "#fff",
-          }}
+          className={`w-[36px] h-[36px] flex items-center justify-center rounded-[8px] transition-all ${
+            Number(p) === currentPage
+              ? "bg-[#7B68EE] text-[#ffffff] font-[600]"
+              : "text-[#333333] font-[500] hover:bg-[#F3E8FF] hover:text-[#7B68EE]"
+          }`}
         >
           {p}
         </button>
@@ -142,169 +143,183 @@ export default function StockOutPage() {
     );
   };
 
-  if (loading) return <p className="p-4">Loading...</p>;
-  if (error) return <p className="p-4 text-red-500">Error: {error}</p>;
+  if (loading) return <p className="p-[12px] text-[16px] text-[#333333]">Loading...</p>;
+  if (error) return <p className="p-[12px] text-[16px] text-[#ff0000]">Error: {error}</p>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">Quản lý phiếu xuất kho</h1>
-
-      <div className="p-4">
-        <button
-          className="mb-4 bg-gray-300 text-black px-3 py-2 rounded"
-           onClick={() => router.push("http://localhost:4000")}
+    <div className="container min-h-screen flex flex-col mb-[10px]">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] rounded-[16px] shadow-[0_4px_20px_rgba(123,104,238,0.15)] mb-[32px]">
+        <h1
+          className="text-center text-[28px] font-[800] py-[24px] text-[#ffffff] tracking-[1px] font-arial"
         >
-          ← Quay lại
+          📤 Quản lý phiếu xuất kho
+        </h1>
+      </div>
+
+      {/* Nút quay lại */}
+      <div className="mb-[20px]">
+        <button
+          className="flex items-center cursor-pointer px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+          onClick={() => router.push("/")}
+        >
+          <ArrowLeft size={20} className="mr-[6px] text-[#ffffff]"/> Quay lại
         </button>
+      </div>
 
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            placeholder="Tìm kiếm..."
-            className="border p-2 flex-1"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <select
-            className="border p-2"
-            value={sort}
-            onChange={(e) => setSort(e.target.value as "asc" | "desc")}
-          >
-            <option value="desc">Mới nhất</option>
-            <option value="asc">Cũ nhất</option>
-          </select>
-          <button
-            className="bg-blue-500 text-white px-3 py-2 rounded"
-            onClick={() => router.push("create")}
-          >
-            Thêm phiếu xuất
-          </button>
-          <button
-            className="bg-red-500 text-white px-3 py-2 rounded"
-            onClick={handleDeleteSelected}
-          >
-            Xóa phiếu đã chọn
-          </button>
-        </div>
+      {/* Search & Sort & Add & Delete Selected */}
+      <div className="flex gap-[20px] mb-[20px]">
+        <input
+          type="text"
+          placeholder="🔍 Tìm kiếm..."
+          className="px-[20px] py-[10px] text-[16px] font-[400] text-[#222222] outline-none rounded-[8px] border border-[#E5E7EB] focus:ring-[3px] focus:ring-[#7B68EE] flex-1 shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <select
+          className="px-[16px] py-[10px] text-[16px] font-[500] text-[#333333] outline-none cursor-pointer rounded-[8px] border border-[#E5E7EB] focus:ring-[3px] focus:ring-[#7B68EE] shadow-[0_1px_3px_rgba(0,0,0,0.08)]"
+          onChange={(e) => setSort(e.target.value as "asc" | "desc")}
+        >
+          <option value="desc">⬇️ Mới nhất</option>
+          <option value="asc">⬆️ Cũ nhất</option>
+        </select>
+        <button
+          className="flex items-center px-[18px] py-[10px] rounded-[8px] cursor-pointer bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+          onClick={() => router.push("create")}
+        >
+          <Plus size={20} className="mr-[6px] text-[#ffffff]" /> Thêm phiếu xuất
+        </button>
+        <button
+          className="flex items-center px-[18px] py-[10px] rounded-[8px] cursor-pointer bg-[#EF4444] hover:bg-[#dc2626] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+          onClick={handleDeleteSelected}
+        >
+          <X size={20} className="mr-[6px] text-[#ffffff]"/> Xóa phiếu đã chọn
+        </button>
+      </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-full border border-gray-300">
-            <thead className="bg-gray-100">
-              <tr>
-                <th className="border px-3 py-2 text-center">
+      {/* Table */}
+      <div className="bg-[#ffffff] rounded-[16px] border border-[#E5E7EB] shadow-[0_4px_16px_rgba(0,0,0,0.05)] overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6]">
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[5%]">
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedIds.length === currentStockOuts.length &&
+                    currentStockOuts.length > 0
+                  }
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setSelectedIds(currentStockOuts.map((s) => s.stock_out_id));
+                    } else {
+                      setSelectedIds([]);
+                    }
+                  }}
+                />
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[6%]">
+                🆔 ID
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[18%]">
+                🏷️ Sản phẩm
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[12%]">
+                🏬 Kho
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[10%]">
+                📊 Số lượng
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[16%]">
+                📅 Ngày xuất
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[14%]">
+                🏪 Cửa hàng
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[14%]">
+                📝 Ghi chú
+              </th>
+              <th className="px-[16px] py-[14px] text-[15px] font-[600] text-[#374151] border-b-[2px] border-[#7B68EE4D] w-[10%]">
+                ⚙️ Hành động
+              </th>
+            </tr>
+          </thead>
+          <tbody className="text-[14px] font-[400] text-[#222222]">
+            {currentStockOuts.map((s) => (
+              <tr
+                key={s.stock_out_id}
+                className="border-b border-[#F3F4F6] transition-all hover:bg-gradient-to-r hover:from-[#EEF2FF] hover:to-[#F3E8FF]"
+              >
+                <td className="text-center px-[16px] py-[12px]">
                   <input
                     type="checkbox"
-                    checked={
-                      selectedIds.length === currentStockOuts.length &&
-                      currentStockOuts.length > 0
-                    }
+                    checked={selectedIds.includes(s.stock_out_id)}
                     onChange={(e) => {
                       if (e.target.checked) {
-                        setSelectedIds(currentStockOuts.map((s) => s.stock_out_id));
+                        setSelectedIds([...selectedIds, s.stock_out_id]);
                       } else {
-                        setSelectedIds([]);
+                        setSelectedIds(
+                          selectedIds.filter((id) => id !== s.stock_out_id)
+                        );
                       }
                     }}
                   />
-                </th>
-                <th className="border px-3 py-2">ID</th>
-                <th className="border px-3 py-2">Sản phẩm</th>
-                <th className="border px-3 py-2">Kho</th>
-                <th className="border px-3 py-2">Số lượng</th>
-                <th className="border px-3 py-2">Ngày xuất</th>
-                <th className="border px-3 py-2">Store</th>
-                <th className="border px-3 py-2">Ghi chú</th>
-                <th className="border px-3 py-2">Hành động</th>
+                </td>
+                <td className="text-center px-[16px] py-[12px] font-[500]">{s.stock_out_id}</td>
+                <td className="px-[16px] py-[12px] font-[500]">{s.product}</td>
+                <td className="px-[16px] py-[12px]">{s.warehouse ?? "-"}</td>
+                <td className="text-center px-[16px] py-[12px]">
+                  <span className="inline-flex items-center justify-center w-[48px] h-[28px] rounded-[8px] bg-[#FDE68A] text-[#92400E] font-[500] text-[14px]">
+                    {s.quantity}
+                  </span>
+                </td>
+                <td className="px-[16px] py-[12px] text-[#4B5563] font-[500] text-[14px]">
+                  {new Date(s.date_out).toLocaleDateString("vi-VN")} •{" "}
+                  {new Date(s.date_out).toLocaleTimeString("vi-VN", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </td>
+                <td className="px-[16px] py-[12px]">{s.store ?? "-"}</td>
+                <td className="px-[16px] py-[12px]">{s.note ?? "-"}</td>
+                <td className="px-[16px] py-[12px] flex gap-[8px] justify-center">
+                  <button
+                    className="px-[12px] py-[6px] rounded-[6px] cursor-pointer bg-[#059669] hover:bg-[#047857] text-[#ffffff] text-[14px] font-[500] transition-all"
+                    onClick={() => router.push(`/stock-out/${s.stock_out_id}`)}
+                  >
+                    ✏️ Sửa
+                  </button>
+                  <button
+                    className="px-[12px] py-[6px] rounded-[6px] cursor-pointer bg-[#DC2626] hover:bg-[#B91C1C] text-[#ffffff] text-[14px] font-[500] transition-all"
+                    onClick={() => handleDelete(s.stock_out_id)}
+                  >
+                    🗑️ Xóa
+                  </button>
+                </td>
               </tr>
-            </thead>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-            <tbody>
-              {currentStockOuts.map((s) => (
-                <tr key={s.stock_out_id} className="hover:bg-gray-50">
-                  <td className="border px-3 py-2 text-center">
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.includes(s.stock_out_id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedIds([...selectedIds, s.stock_out_id]);
-                        } else {
-                          setSelectedIds(
-                            selectedIds.filter((id) => id !== s.stock_out_id)
-                          );
-                        }
-                      }}
-                    />
-                  </td>
-                  <td className="border px-3 py-2">{s.stock_out_id}</td>
-                  <td className="border px-3 py-2">{s.product}</td>
-                  <td className="border px-3 py-2">{s.warehouse ?? "-"}</td>
-                  <td className="border px-3 py-2">{s.quantity}</td>
-                  <td className="border px-3 py-2">
-                    {new Date(s.date_out).toLocaleString()}
-                  </td>
-                  <td className="border px-3 py-2">{s.store ?? "-"}</td>
-                  <td className="border px-3 py-2">{s.note ?? "-"}</td>
-                  <td className="border px-3 py-2 flex gap-1">
-                    <button
-                      className="text-blue-500"
-                      onClick={() => router.push(`/stock-out/${s.stock_out_id}`)}
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      className="text-red-500"
-                      onClick={() => handleDelete(s.stock_out_id)}
-                    >
-                      Xóa
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="mt-4 flex justify-center items-center gap-2">
+      {/* Pagination */}
+      <div className="mt-[20px] flex justify-center">
+        <div className="flex items-center gap-[8px]">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-2 py-1 border rounded"
+            className="flex items-center gap-[4px] px-[14px] py-[8px] text-[14px] font-[500] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] rounded-[8px] disabled:opacity-50 transition-all"
           >
-            {"<"}
+            <ChevronLeft size={18} /> Trang trước
           </button>
-
           {renderPageNumbers()}
-
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-2 py-1 border rounded"
+            className="flex items-center gap-[4px] px-[14px] py-[8px] text-[14px] font-[500] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] rounded-[8px] disabled:opacity-50 transition-all"
           >
-            {">"}
+            Trang sau <ChevronRight size={18} />
           </button>
-
-          <div className="inline-flex items-center gap-2 ml-4">
-            <span>Đến trang</span>
-            <input
-              type="number"
-              min={1}
-              max={totalPages}
-              value={currentPage}
-              onChange={(e) => setCurrentPage(Number(e.target.value))}
-              className="border px-2 py-1 w-16"
-            />
-            <button
-              className="bg-blue-500 text-white px-2 py-1 rounded"
-              onClick={() => {
-                if (currentPage >= 1 && currentPage <= totalPages) {
-                  setCurrentPage(currentPage);
-                }
-              }}
-            >
-              OK
-            </button>
-          </div>
         </div>
       </div>
     </div>

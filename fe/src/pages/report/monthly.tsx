@@ -72,7 +72,7 @@ export default function MonthlyReportPage() {
 
   return (
     <div className="p-[30px] font-sans">
-      <h1 className="text-[28px] mb-[20px] font-[700]">
+      <h1 className="text-[28px] mb-[20px] font-[700] font-arial">
         📊 Báo cáo nhập/xuất theo tháng - {year}
       </h1>
 
@@ -160,7 +160,7 @@ export default function MonthlyReportPage() {
           </div>
 
           {/* Biểu đồ cột */}
-          <h2 className="mb-[20px] text-[20px] font-[600]">
+          <h2 className="mb-[20px] text-[20px] font-[600] font-arial">
             📊 Biểu đồ nhập/xuất theo tháng
           </h2>
           <ResponsiveContainer width="100%" height={400}>

@@ -47,7 +47,7 @@ export default function DashboardPage() {
   return (
     <div className="container max-w-[1200px] mx-auto py-[32px]">
       {/* Tiêu đề chính */}
-      <h1 className="text-center text-[28px] font-extrabold mb-[32px] text-[#7B68EE] tracking-[1px] drop-shadow-sm font-sans">
+      <h1 className="text-center text-[28px] font-[800] mb-[32px] text-[#7B68EE] tracking-[1px] drop-shadow-sm font-arial">
         📦 Kho Trúc Anh
       </h1>
 

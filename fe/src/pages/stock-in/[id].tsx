@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 
 interface Product {
   product_id: number;
@@ -92,13 +93,22 @@ export default function DetailStockIn() {
   };
 
   return (
-    <div className="container max-w-[600px] mx-auto mt-[32px]">
+    <div className="container max-w-[600px] min-h-screen mx-auto flex flex-col items-center ">
       <section className="bg-[#ffffff] rounded-[16px] shadow p-[24px]">
-        <h1 className="text-center text-[24px] font-[600] mb-[24px] text-[#7B68EE]">
+        <h1 className="text-center text-[24px] font-[600] mb-[24px] text-[#7B68EE] font-arial">
           Sửa phiếu nhập kho: {formData.stock_in_id || id}
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-[16px]">
+        {/* Nút quay lại */}
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="flex items-center cursor-pointer px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+        >
+          <ArrowLeft size={20} className="mr-[6px] text-[#ffffff]"/> Quay lại
+        </button>
+
+        <form onSubmit={handleSubmit} className="space-y-[16px] mt-[20px]">
           <select
             name="product_id"
             value={formData.product_id}

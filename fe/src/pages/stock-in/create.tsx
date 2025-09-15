@@ -68,18 +68,18 @@ export default function CreateStockIn() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-[#f8fafc] to-[#e0e7ef] min-h-screen py-[32px] px-[24px]">
+    <div className="bg-gradient-to-br from-[#f8fafc] to-[#e0e7ef] min-h-[100%] py-[32px] px-[24px]">
       <div className="max-w-[900px] mx-auto rounded-[16px] shadow-[6px] border border-[#e5e7eb] overflow-hidden">
         {/* Header */}
         <div className="relative bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[20px] py-[16px]">
           <button
-            className="flex items-center absolute top-1/2 -translate-y-1/2 z-[5] gap-[6px] text-[#fff] border-0 cursor-pointer font-[500] bg-transparent text-[16px] transition-all"
+            className="flex items-center absolute top-1/2 -translate-y-1/2 z-[5] gap-[6px] text-[#fff] border-0 cursor-pointer font-[600] bg-transparent text-[16px] transition-all"
             onClick={() => router.push("/stock-in/StockInPage")}
             type="button"
           >
             <ArrowLeft size={18} /> Quay lại
           </button>
-          <h1 className="w-full text-center text-[#fff] text-[20px] font-[700] pointer-events-none select-none">
+          <h1 className="w-full text-center text-[#fff] text-[20px] font-[700] pointer-events-none select-none font-arial">
             📦 Tạo Phiếu Nhập Kho
           </h1>
         </div>
@@ -192,7 +192,7 @@ export default function CreateStockIn() {
                 value={formData.note}
                 onChange={handleChange}
                 rows={4}
-                className="w-full p-[14px] border-[2px] border-[#cbd5e1] rounded-[8px] text-[15px] bg-[#f9fafb] focus:border-[#2563eb] focus:bg-[#fff] focus:ring-[2px] focus:ring-[#2563eb40] outline-none transition-all"
+                className="w-full flex py-[14px] border-[2px] border-[#cbd5e1] rounded-[8px] text-[15px] bg-[#f9fafb] focus:border-[#2563eb] focus:bg-[#fff] focus:ring-[2px] focus:ring-[#2563eb40] outline-none transition-all"
                 placeholder="Nhập ghi chú thêm (tùy chọn)..."
               />
             </div>
@@ -201,7 +201,7 @@ export default function CreateStockIn() {
             <div className="pt-[8px]">
               <button
                 type="submit"
-                className="w-full text-[16px] cursor-pointer bg-gradient-to-r from-[#7B68EE] to-[#9370DB] hover:from-[#1d4ed8] hover:to-[#2563eb] text-[#fff] font-[700] py-[16px] px-[24px] rounded-[8px] shadow-[6px] hover:shadow-[8px] transition-all flex items-center justify-center"
+                className="w-full text-[16px] cursor-pointer bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#fff] font-[700] py-[16px] px-[24px] rounded-[8px] shadow-[6px] hover:shadow-[8px] transition-all flex items-center justify-center"
               >
                 <Check className="w-[20px] h-[20px] mr-[8px]" />
                 Lưu phiếu nhập

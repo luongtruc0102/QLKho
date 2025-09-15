@@ -18,7 +18,8 @@ const StockOutTable: React.FC<StockOutTableProps> = ({ data }) => {
     <div className="max-w-[1200px] mx-auto bg-[#ffffff] rounded-[16px] shadow-[0_4px_24px_0_rgba(123,104,238,0.08)] border border-[#E5E7EB] overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[32px] py-[24px]">
-        <h2 className="text-[#ffffff] text-[24px] font-[700] text-center m-0">
+        <h2 className="text-[#ffffff] text-[24px] font-[700] text-center m-0 font-arial"
+        >
           📤 Danh sách xuất kho
         </h2>
       </div>

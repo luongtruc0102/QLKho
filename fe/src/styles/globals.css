@@ -41,63 +41,6 @@ body::before {
   box-sizing: border-box;
 }
 
-.btn{
-  padding: 8px 16px;
-  border-radius: 4px;
-  border:none;
-  font-size: 16px;
-  cursor: pointer;
-}
-/* Button Primary */
-.btn-primary {
-  background-color: #2563eb; /* xanh dương */
-  color: #fff;
-}
-.btn-primary-hover:hover {
-  background-color: #1d4ed8;
-}
-
-/* Button Secondary */
-.btn-secondary {
-  background-color: #7c3aed; /* tím */
-  color: #fff;
-}
-.btn-secondary-hover:hover {
-  background-color: #6d28d9;
-}
-
-/* Button Success */
-.btn-success {
-  background-color: #059669; /* xanh lá */
-  color: #fff;
-}
-.btn-success-hover:hover {
-  background-color: #047857;
-}
-
-/* Button Warning */
-.btn-warning {
-  background-color: #ea580c; /* cam/vàng */
-  color: #fff;
-}
-.btn-warning-hover:hover {
-  background-color: #dc2626;
-}
-
-/* Button Danger */
-.btn-danger {
-  background-color: #dc2626; /* đỏ */
-  color: #fff;
-}
-.btn-danger-hover:hover {
-  background-color: #b91c1c;
-}
-
-/* Button Neutral */
-.btn-neutral {
-  background-color: #374151; /* xám */
-  color: #fff;
-}
-.btn-neutral-hover:hover {
-  background-color: #1f2937;
+.font-arial{
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
 }

@@ -11,7 +11,7 @@ const StockInTable: React.FC<StockInTableProps> = ({ data }) => {
     <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_24px_0_rgba(123,104,238,0.08)] border border-[#E5E7EB] overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[32px] py-[20px]">
-        <h2 className="text-white text-[20px] font-bold text-center m-0">
+        <h2 className="text-white text-[20px] font-[700] text-center m-0 font-arial">
           📥 Danh sách nhập kho
         </h2>
       </div>

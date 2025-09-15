@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // ✅ dùng navigation thay vì next/router
+import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
+import { ArrowLeft } from "lucide-react";
 
 interface Product {
   product_id: number;
@@ -27,9 +28,11 @@ interface StockOut {
   note?: string;
 }
 
-export default function DetailStockOut({ params }: { params: { id: string } }) {
+export default function DetailStockOut() {
   const router = useRouter();
-  const { id } = params;
+  // @ts-ignore
+  const params = useParams() as { id: string };
+  const id = params?.id;
 
   const [products, setProducts] = useState<Product[]>([]);
   const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
@@ -39,14 +42,16 @@ export default function DetailStockOut({ params }: { params: { id: string } }) {
     product_id: 0,
     warehouse_id: 0,
     quantity: 1,
-    to_store: undefined,
+    to_store: null,
     note: "",
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
 
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [stockRes, productsRes, warehousesRes, storesRes] =
           await Promise.all([
@@ -59,9 +64,17 @@ export default function DetailStockOut({ params }: { params: { id: string } }) {
         setProducts(productsRes.data);
         setWarehouses(warehousesRes.data);
         setStores(storesRes.data);
-        setFormData(stockRes.data);
+
+        setFormData({
+          ...stockRes.data,
+          to_store: stockRes.data.to_store ?? null,
+          note: stockRes.data.note ?? "",
+        });
       } catch (err) {
         console.error(err);
+        alert("Không thể tải dữ liệu phiếu xuất kho.");
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -73,12 +86,14 @@ export default function DetailStockOut({ params }: { params: { id: string } }) {
   ) => {
     const { name, value } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: ["product_id", "warehouse_id", "to_store"].includes(name)
-        ? Number(value)
+    setFormData((prev) => ({
+      ...prev,
+      [name]: ["product_id", "warehouse_id", "to_store", "quantity"].includes(
+        name
+      )
+        ? value === "" ? null : Number(value)
         : value,
-    });
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,90 +105,112 @@ export default function DetailStockOut({ params }: { params: { id: string } }) {
         warehouse_id: Number(formData.warehouse_id),
         quantity: Number(formData.quantity),
         to_store: formData.to_store ? Number(formData.to_store) : null,
+        note: formData.note ?? "",
       });
 
-      // ✅ quay lại StockOutPage sau khi cập nhật thành công
-      router.push("http://localhost:4000/stock-out/StockOutPage");
+      router.push("/stock-out/StockOutPage");
     } catch (err) {
       console.error("Cập nhật thất bại:", err);
       alert("Cập nhật thất bại");
     }
   };
 
+  if (loading) {
+    return (
+      <div className="p-6 max-w-lg mx-auto text-center text-gray-500">
+        Đang tải dữ liệu...
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-4">
-        Sửa phiếu xuất: {formData.stock_out_id || id}
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <select
-          name="product_id"
-          value={formData.product_id}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        >
-          {products.map((p) => (
-            <option key={p.product_id} value={p.product_id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
+    <div className="container max-w-[600px] min-h-screen mx-auto flex flex-col items-center ">
+      <section className="bg-[#ffffff] rounded-[16px] shadow p-[24px]">
+        <h1 className="text-center text-[24px] font-[600] mb-[24px] text-[#7B68EE] font-arial">
+          Sửa phiếu xuất kho: {formData.stock_out_id || id}
+        </h1>
 
-        <select
-          name="warehouse_id"
-          value={formData.warehouse_id}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        >
-          {warehouses.map((w) => (
-            <option key={w.warehouse_id} value={w.warehouse_id}>
-              {w.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="number"
-          name="quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          min={1}
-          required
-        />
-
-        <select
-          name="to_store"
-          value={formData.to_store ?? ""}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        >
-          <option value="">-- Chọn cửa hàng --</option>
-          {stores.map((s) => (
-            <option key={s.store_id} value={s.store_id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-
-        <input
-          type="text"
-          name="note"
-          value={formData.note ?? ""}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          placeholder="Ghi chú"
-        />
-
+        {/* Nút quay lại */}
         <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          type="button"
+          onClick={() => router.back()}
+          className="flex items-center cursor-pointer px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
         >
-          Cập nhật
+          <ArrowLeft size={20} className="mr-[6px] text-[#ffffff]" /> Quay lại
         </button>
-      </form>
+
+        <form onSubmit={handleSubmit} className="space-y-[16px] mt-[20px]">
+          <select
+            name="product_id"
+            value={formData.product_id}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            required
+          >
+            <option value={0}>-- Chọn sản phẩm --</option>
+            {products.map((p) => (
+              <option key={p.product_id} value={p.product_id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+
+          <select
+            name="warehouse_id"
+            value={formData.warehouse_id}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            required
+          >
+            <option value={0}>-- Chọn kho --</option>
+            {warehouses.map((w) => (
+              <option key={w.warehouse_id} value={w.warehouse_id}>
+                {w.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="number"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            min={1}
+            required
+          />
+
+          <select
+            name="to_store"
+            value={formData.to_store ?? ""}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+          >
+            <option value="">-- Chọn cửa hàng --</option>
+            {stores.map((s) => (
+              <option key={s.store_id} value={s.store_id}>
+                {s.name}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="text"
+            name="note"
+            value={formData.note ?? ""}
+            onChange={handleChange}
+            placeholder="Ghi chú..."
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+          />
+
+          <button
+            type="submit"
+            className="bg-[#059669] hover:bg-[#047857] text-[#ffffff] px-[16px] py-[10px] rounded-[8px] text-[15px] font-[500] cursor-pointer"
+          >
+            Cập nhật
+          </button>
+        </form>
+      </section>
     </div>
   );
 }

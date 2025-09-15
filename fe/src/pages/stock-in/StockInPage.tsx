@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 
 export interface StockInItem {
   stock_in_id: number;
@@ -151,20 +151,19 @@ export default function StockInPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] rounded-[16px] shadow-[0_4px_20px_rgba(123,104,238,0.15)] mb-[32px]">
         <h1
-          className="text-center text-[28px] font-[800] py-[24px] text-[#ffffff] tracking-[1px]"
-          style={{ fontFamily: "'Montserrat', 'Segoe UI', Arial, sans-serif" }}
+          className="text-center text-[28px] font-[800] py-[24px] text-[#ffffff] tracking-[1px] font-arial"
         >
-          📥 Quản lý phiếu nhập
+          📥 Quản lý phiếu nhập kho
         </h1>
       </div>
 
       {/* Nút quay lại */}
       <div className="mb-[20px]">
         <button
-          className="bg-gray-300 text-black px-3 py-2 rounded hover:bg-gray-400 transition-colors"
+          className="flex items-center cursor-pointer px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
           onClick={() => router.push("/")}
         >
-          ← Quay lại
+          <ArrowLeft size={20} className="mr-[6px] text-[#ffffff]"/> Quay lại
         </button>
       </div>
 
@@ -185,16 +184,16 @@ export default function StockInPage() {
           <option value="asc">⬆️ Cũ nhất</option>
         </select>
         <button
-          className="flex items-center px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+          className="flex items-center px-[18px] py-[10px] rounded-[8px] cursor-pointer bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
           onClick={() => router.push("create")}
         >
           <Plus size={20} className="mr-[6px] text-[#ffffff]" /> Thêm phiếu nhập
         </button>
         <button
-          className="bg-red-500 text-white px-3 py-2 rounded"
+          className="flex items-center px-[18px] py-[10px] rounded-[8px] cursor-pointer bg-[#EF4444] hover:bg-[#dc2626] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
           onClick={handleDeleteSelected}
         >
-          Xóa phiếu đã chọn
+          <X size={20} className="mr-[6px] text-[#ffffff]"/> Xóa phiếu đã chọn
         </button>
       </div>
 
@@ -285,13 +284,13 @@ export default function StockInPage() {
                 <td className="px-[16px] py-[12px]">{s.note ?? "-"}</td>
                 <td className="px-[16px] py-[12px] flex gap-[8px] justify-center">
                   <button
-                    className="px-[12px] py-[6px] rounded-[6px] bg-[#059669] hover:bg-[#047857] text-[#ffffff] text-[14px] font-[500] transition-all"
+                    className="px-[12px] py-[6px] rounded-[6px] cursor-pointer bg-[#059669] hover:bg-[#047857] text-[#ffffff] text-[14px] font-[500] transition-all"
                     onClick={() => router.push(`/stock-in/${s.stock_in_id}`)}
                   >
                     ✏️ Sửa
                   </button>
                   <button
-                    className="px-[12px] py-[6px] rounded-[6px] bg-[#DC2626] hover:bg-[#B91C1C] text-[#ffffff] text-[14px] font-[500] transition-all"
+                    className="px-[12px] py-[6px] rounded-[6px] cursor-pointer bg-[#DC2626] hover:bg-[#B91C1C] text-[#ffffff] text-[14px] font-[500] transition-all"
                     onClick={() => handleDelete(s.stock_in_id)}
                   >
                     🗑️ Xóa

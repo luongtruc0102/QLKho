@@ -13,6 +13,7 @@ import {
   WarehouseTransfer,
 } from "@/services/warehousetransferService";
 import { getAllProducts, Product } from "@/services/productService";
+import { ArrowLeft, ArrowRight, Plus, X } from "lucide-react";
 
 export default function WarehouseTransferPage() {
   const [transfers, setTransfers] = useState<WarehouseTransfer[]>([]);
@@ -31,12 +32,11 @@ export default function WarehouseTransferPage() {
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 8;
 
   // Search & Sort
   const [search, setSearch] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
-
   const [gotoPage, setGotoPage] = useState(1);
 
   useEffect(() => {
@@ -136,245 +136,281 @@ export default function WarehouseTransferPage() {
   };
 
   return (
-    <div className="p-4">
-      <button
-        onClick={() => (window.location.href = "http://localhost:4000/")}
-        className="bg-gray-500 text-white px-3 py-2 rounded hover:bg-gray-600 mb-4"
-      >
-        ⬅ Quay lại trang chính
-      </button>
-
-      <h1 className="text-xl font-bold mb-4">
-        Chuyển sản phẩm từ kho chính sang kho con
-      </h1>
-
-      {/* Search & Sort */}
-      <div className="flex space-x-4 mb-4">
-        <input
-          type="text"
-          placeholder="Tìm kiếm sản phẩm / kho..."
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="border px-2 py-1 w-1/2"
-        />
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-          className="border px-2 py-1"
-        >
-          <option value="desc">Mới nhất → Cũ nhất</option>
-          <option value="asc">Cũ nhất → Mới nhất</option>
-        </select>
-      </div>
-
-      <button
-        className="bg-blue-500 text-white px-3 py-2 rounded mb-4"
-        onClick={() => setShowForm(true)}
-      >
-        Thêm chuyển kho
-      </button>
-
-      {showForm && (
-        <form
-          onSubmit={handleSubmit}
-          className="mb-4 p-4 border rounded space-y-2"
-        >
-          <div>
-            <label>Sản phẩm</label>
-            <select
-              value={formData.productId}
-              onChange={(e) =>
-                setFormData({ ...formData, productId: Number(e.target.value) })
-              }
-              className="border px-2 py-1 w-full"
-            >
-              <option value={0}>Chọn sản phẩm</option>
-              {products.map((p) => (
-                <option key={p.product_id} value={p.product_id}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label>Kho chính</label>
-            <select
-              value={formData.fromWarehouseId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  fromWarehouseId: Number(e.target.value),
-                })
-              }
-              className="border px-2 py-1 w-full"
-            >
-              <option value={0}>Chọn kho chính</option>
-              {warehouses
-                .filter((w) => w.is_main)
-                .map((w) => (
-                  <option key={w.warehouse_id} value={w.warehouse_id}>
-                    {w.name}
-                  </option>
-                ))}
-            </select>
-          </div>
-
-          <div>
-            <label>Kho con</label>
-            <select
-              value={formData.toSubWarehouseId}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  toSubWarehouseId: Number(e.target.value),
-                })
-              }
-              className="border px-2 py-1 w-full"
-            >
-              <option value={0}>Chọn kho con</option>
-              {subWarehouses.map((s) => (
-                <option key={s.sub_id} value={s.sub_id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label>Số lượng</label>
-            <input
-              type="number"
-              value={formData.quantity}
-              onChange={(e) =>
-                setFormData({ ...formData, quantity: Number(e.target.value) })
-              }
-              className="border px-2 py-1 w-full"
-            />
-          </div>
-
-          <div>
-            <label>Ghi chú</label>
-            <input
-              type="text"
-              value={formData.note}
-              onChange={(e) =>
-                setFormData({ ...formData, note: e.target.value })
-              }
-              className="border px-2 py-1 w-full"
-            />
-          </div>
-
-          <div className="flex space-x-2">
-            <button
-              type="submit"
-              className="bg-green-500 text-white px-3 py-2 rounded"
-            >
-              Lưu
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className="bg-gray-400 text-white px-3 py-2 rounded"
-            >
-              Hủy
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Table */}
-      <table className="w-full border-collapse border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border px-2 py-1">ID</th>
-            <th className="border px-2 py-1">Sản phẩm</th>
-            <th className="border px-2 py-1">Kho chính</th>
-            <th className="border px-2 py-1">Kho con</th>
-            <th className="border px-2 py-1">Số lượng</th>
-            <th className="border px-2 py-1">Ngày chuyển</th>
-            <th className="border px-2 py-1">Ghi chú</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentData.map((t) => (
-            <tr key={t.transfer_id}>
-              <td className="border px-2 py-1">{t.transfer_id}</td>
-              <td className="border px-2 py-1">{t.product.name}</td>
-              <td className="border px-2 py-1">{t.fromWarehouse.name}</td>
-              <td className="border px-2 py-1">{t.toSubWarehouse.name}</td>
-              <td className="border px-2 py-1">{t.quantity}</td>
-              <td className="border px-2 py-1">
-                {new Date(t.transfer_date).toLocaleString()}
-              </td>
-              <td className="border px-2 py-1">{t.note || "-"}</td>
-            </tr>
-          ))}
-          {currentData.length === 0 && (
-            <tr>
-              <td colSpan={7} className="text-center py-2">
-                Không có dữ liệu
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Pagination */}
-      <div className="flex flex-col items-center mt-4 space-y-4">
-        <div className="flex items-center space-x-2">
+    <div className="min-h-screen bg-[#F9FAFB] p-[32px] font-sans">
+      {/* Container */}
+      <div className="max-w-[1200px] mx-auto bg-[#fff] rounded-[16px] shadow-[0_4px_24px_rgba(123,104,238,0.08)] border border-[#E5E7EB] overflow-hidden">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[32px] py-[24px] flex justify-between items-center">
+          <h1 className="text-[#fff] text-[24px] font-[700] flex items-center gap-[8px] m-0 font-arial">
+            🔄 Chuyển sản phẩm từ kho chính sang kho con
+          </h1>
           <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
-            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
+            onClick={() => (window.location.href = "http://localhost:4000/")}
+            className="flex items-center cursor-pointer px-[24px] py-[12px] rounded-[10px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#fff] font-[600] text-[16px] shadow-[0_2px_6px_rgba(37,99,235,0.3)] transition-all"
           >
-            &lt;
-          </button>
-          {renderPageNumbers().map((page, i) =>
-            page === "..." ? (
-              <span key={i} className="px-2">
-                ...
-              </span>
-            ) : (
-              <button
-                key={i}
-                onClick={() => setCurrentPage(page as number)}
-                className={`px-3 py-1 border rounded ${
-                  currentPage === page ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                {page}
-              </button>
-            )
-          )}
-          <button
-            className="px-3 py-1 border rounded disabled:opacity-50"
-            onClick={() =>
-              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-            }
-            disabled={currentPage === totalPages}
-          >
-            &gt;
+            <ArrowLeft size={20} className="mr-[8px]" /> Quay lại trang chủ
           </button>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <span>Đến trang</span>
+        {/* Search & Sort */}
+        <div className="p-[24px] border-b border-[#E5E7EB] flex gap-[16px]">
           <input
-            type="number"
-            value={gotoPage}
-            onChange={(e) => setGotoPage(Number(e.target.value))}
-            className="border px-2 py-1 w-16 text-center"
+            type="text"
+            placeholder="🔍 Tìm kiếm sản phẩm / kho..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="w-full h-[48px] px-[20px] text-[15px] font-[500] rounded-[10px] border border-[#D1D5DB] focus:border-[#7B68EE] focus:ring-[2px] focus:ring-[#7B68EE] outline-none shadow-sm transition"
           />
-          <button
-            className="bg-blue-500 text-white px-3 py-1 rounded"
-            onClick={handleGotoPage}
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+            className="px-[20px] py-[12px] border border-[#D1D5DB] rounded-[10px] text-[15px] font-[500] focus:border-[#7B68EE] focus:ring-[2px] focus:ring-[#7B68EE]"
           >
-            OK
+            <option value="desc">⬇ Mới nhất → Cũ nhất</option>
+            <option value="asc">⬆ Cũ nhất → Mới nhất</option>
+          </select>
+        </div>
+
+        {/* Add Transfer Button */}
+        <div className="px-[24px] py-[16px]">
+          <button
+            onClick={() => setShowForm(true)}
+            className="flex items-center gap-[5px] cursor-pointer px-[24px] py-[12px] rounded-[10px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#fff] font-[600] text-[16px] shadow-[0_2px_6px_rgba(37,99,235,0.3)] transition-all"
+          >
+            <Plus size={20} /> Thêm chuyển kho
           </button>
+        </div>
+
+        {/* Form */}
+        {showForm && (
+          <form
+            onSubmit={handleSubmit}
+            className="mx-[24px] mb-[24px] p-[24px] border border-[#E5E7EB] rounded-[16px] shadow-sm bg-[#F9FAFB] space-y-[18px]"
+          >
+            <div className="grid grid-cols-2 gap-[24px]">
+              <div>
+                <label className="font-[600] mb-[6px] block text-[15px]">Sản phẩm</label>
+                <select
+                  value={formData.productId}
+                  onChange={(e) =>
+                    setFormData({ ...formData, productId: Number(e.target.value) })
+                  }
+                  className="w-full border px-[14px] py-[10px] rounded-[8px] text-[14px] font-[500] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE]"
+                >
+                  <option value={0}>Chọn sản phẩm</option>
+                  {products.map((p) => (
+                    <option key={p.product_id} value={p.product_id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-[600] mb-[6px] block text-[15px]">Kho chính</label>
+                <select
+                  value={formData.fromWarehouseId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      fromWarehouseId: Number(e.target.value),
+                    })
+                  }
+                  className="w-full border px-[14px] py-[10px] rounded-[8px] text-[14px] font-[500] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE]"
+                >
+                  <option value={0}>Chọn kho chính</option>
+                  {warehouses
+                    .filter((w) => w.is_main)
+                    .map((w) => (
+                      <option key={w.warehouse_id} value={w.warehouse_id}>
+                        {w.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-[600] mb-[6px] block text-[15px]">Kho con</label>
+                <select
+                  value={formData.toSubWarehouseId}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      toSubWarehouseId: Number(e.target.value),
+                    })
+                  }
+                  className="w-full border px-[14px] py-[10px] rounded-[8px] text-[14px] font-[500] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE]"
+                >
+                  <option value={0}>Chọn kho con</option>
+                  {subWarehouses.map((s) => (
+                    <option key={s.sub_id} value={s.sub_id}>
+                      {s.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="font-[600] mb-[6px] block text-[15px]">Số lượng</label>
+                <input
+                  type="number"
+                  value={formData.quantity}
+                  onChange={(e) =>
+                    setFormData({ ...formData, quantity: Number(e.target.value) })
+                  }
+                  className="w-full border px-[14px] py-[10px] rounded-[8px] text-[14px] font-[500] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="font-[600] mb-[6px] block text-[15px]">Ghi chú</label>
+              <input
+                type="text"
+                value={formData.note}
+                onChange={(e) => setFormData({ ...formData, note: e.target.value })}
+                className="w-full border px-[14px] py-[10px] rounded-[8px] text-[14px] font-[500] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE]"
+              />
+            </div>
+
+            <div className="flex gap-[12px]">
+              <button
+                type="submit"
+                className="bg-[#059669] hover:bg-[#047857] text-[#fff] px-[24px] py-[10px] rounded-[8px] font-[600] shadow"
+              >
+                Lưu
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowForm(false)}
+                className="bg-[#DC2626] hover:bg-[#B91C1C] text-[#fff] px-[20px] py-[10px] rounded-[8px] font-[600] shadow flex items-center gap-[6px]"
+              >
+                <X size={16} /> Hủy
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Table */}
+        <div className="px-[24px] pb-[24px]">
+          <div className="overflow-x-auto rounded-[12px] border border-[#E5E7EB] shadow-sm">
+            <table className="w-full">
+              <thead>
+                <tr className="bg-gradient-to-r from-[#F9FAFB] to-[#F3F4F6]">
+                  <th className="px-[16px] py-[12px] text-left font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    ID
+                  </th>
+                  <th className="px-[16px] py-[12px] text-left font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    Sản phẩm
+                  </th>
+                  <th className="px-[16px] py-[12px] text-left font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    Kho chính
+                  </th>
+                  <th className="px-[16px] py-[12px] text-left font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    Kho con
+                  </th>
+                  <th className="px-[16px] py-[12px] text-center font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    SL
+                  </th>
+                  <th className="px-[16px] py-[12px] text-center font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    Ngày chuyển
+                  </th>
+                  <th className="px-[16px] py-[12px] text-left font-[600] text-[#374151] border-b border-[#E5E7EB]">
+                    Ghi chú
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-[14px] font-[500]">
+                {currentData.map((t) => (
+                  <tr
+                    key={t.transfer_id}
+                    className="border-b border-[#F3F4F6] hover:bg-gradient-to-r hover:from-[#EEF2FF] hover:to-[#F3E8FF] transition"
+                  >
+                    <td className="px-[16px] py-[10px]">{t.transfer_id}</td>
+                    <td className="px-[16px] py-[10px]">{t.product.name}</td>
+                    <td className="px-[16px] py-[10px]">{t.fromWarehouse.name}</td>
+                    <td className="px-[16px] py-[10px]">{t.toSubWarehouse.name}</td>
+                    <td className="px-[16px] py-[10px] text-center font-[600] text-[#2563EB]">
+                      {t.quantity}
+                    </td>
+                    <td className="px-[16px] py-[10px] text-center text-[#6B7280]">
+                      {new Date(t.transfer_date).toLocaleString()}
+                    </td>
+                    <td className="px-[16px] py-[10px] text-[#374151]">
+                      {t.note || "-"}
+                    </td>
+                  </tr>
+                ))}
+                {currentData.length === 0 && (
+                  <tr>
+                    <td
+                      colSpan={7}
+                      className="px-[16px] py-[16px] text-center text-[#6B7280] font-[500]"
+                    >
+                      Không có dữ liệu
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-[32px] flex items-center justify-center gap-[12px]">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className={`px-[16px] py-[10px] flex items-center gap-[6px] rounded-[8px] text-[14px] font-[600] bg-[#7B68EE] text-[#fff] transition-all duration-200
+                  ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-[#6A5ACD] cursor-pointer"
+                  }`}
+              >
+                <ArrowLeft size={18} /> Trang trước
+              </button>
+
+              {renderPageNumbers().map((page, i) =>
+                page === "..." ? (
+                  <span key={i} className="px-[12px] text-[#9CA3AF]">
+                    ...
+                  </span>
+                ) : (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentPage(page as number)}
+                    className={`w-[40px] h-[40px] rounded-[8px] text-[14px] font-[600] transition-all duration-200
+                      ${
+                        currentPage === page
+                          ? "bg-[#7B68EE] text-[#fff] shadow-lg"
+                          : "bg-[#fff] text-[#4B5563] border border-[#D1D5DB] hover:bg-[#F5F3FF] hover:border-[#7B68EE]"
+                      }`}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+
+              <button
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                }
+                disabled={currentPage === totalPages}
+                className={`px-[16px] py-[10px] flex items-center gap-[6px] rounded-[8px] text-[14px] font-[600] bg-[#7B68EE] text-[#fff] transition-all
+                  ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-[#6A5ACD] cursor-pointer"
+                  }`}
+              >
+                Trang sau <ArrowRight size={18} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

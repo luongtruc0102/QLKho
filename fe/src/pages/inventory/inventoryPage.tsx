@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getAllInventory } from "../../services/inventoryService";
 import { InventoryItem } from "../../types";
+import { ArrowLeft, ArrowRight, X } from "lucide-react";
 
 const InventoryPage = () => {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
@@ -72,19 +73,19 @@ const InventoryPage = () => {
       {/* Header */}
       <div className="max-w-[1200px] mx-auto bg-white rounded-[16px] shadow-[0_4px_24px_rgba(123,104,238,0.08)] border border-[#E5E7EB] overflow-hidden">
         <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[32px] py-[24px] flex justify-between items-center">
-          <h1 className="text-[#fff] text-[24px] font-[700] flex items-center gap-[8px] m-0">
+          <h1 className="text-[#fff] text-[24px] font-[700] flex items-center gap-[8px] m-0 font-arial">
             📦 Tồn kho
           </h1>
           <button
             onClick={() => router.push("http://localhost:4000/")}
-            className="px-[20px] py-[12px] bg-[#7B68EE] text-[#fff] cursor-pointer rounded-[8px] font-[500] text-[14px] transition-all duration-200 hover:bg-[#6A5ACD] shadow-md"
-          >
-            ⬅ Quay lại trang chủ
+            className="flex items-center cursor-pointer px-[18px] py-[10px] rounded-[8px] bg-[#7B68EE] hover:bg-[#6A5ACD] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(123,104,238,0.3)] transition-all"
+            >
+            <ArrowLeft size={20} className="mr-[6px] text-[#ffffff]"/> Quay lại trang chủ
           </button>
         </div>
 
         {/* Search */}
-        <div className="p-[24px] border-b border-[#E5E7EB]">
+        <div className="p-[24px] border-b border-[#E5E7EB] flex gap-[10px]">
           <input
             type="text"
             placeholder="🔍 Tìm kiếm sản phẩm hoặc kho..."
@@ -95,6 +96,15 @@ const InventoryPage = () => {
             }}
             className="w-full h-[44px] px-[16px] text-[14px] rounded-[8px] border border-[#D1D5DB] focus:border-[#7B68EE] focus:ring-[1px] focus:ring-[#7B68EE] outline-none shadow-sm transition"
           />
+          <button
+            onClick={() => {
+              setSearchTerm("");
+              setCurrentPage(1);
+            }}
+            className="px-[16px] py-[10px] bg-[#ef4444] hover:bg-[#dc2626] text-[#fff] flex items-center cursor-pointer rounded-[8px] text-[14px] font-[500] transition"
+          >
+            <X size={20}/> Reset
+          </button>
         </div>
 
         {/* Table */}
@@ -173,10 +183,10 @@ const InventoryPage = () => {
                 <button
                   onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
-                  className={`px-[16px] py-[12px] rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
+                  className={`px-[16px] py-[12px] flex items-center rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
                     ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-[#6A5ACD] cursor-pointer"}`}
                 >
-                  ⬅ Trang trước
+                  <ArrowLeft size={18}/> Trang trước
                 </button>
 
                 {renderPageNumbers().map((page, i) =>
@@ -205,14 +215,14 @@ const InventoryPage = () => {
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
                   disabled={currentPage === totalPages}
-                  className={`px-[16px] py-[12px] rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
+                  className={`px-[16px] py-[12px] flex items-center rounded-[8px] text-[14px] font-[500] bg-[#7B68EE] text-[#fff] transition-all duration-200 
                     ${
                       currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-[#6A5ACD] cursor-pointer"
                     }`}
                 >
-                  Trang sau ➡
+                  Trang sau <ArrowRight size={18}/>
                 </button>
               </div>
 
