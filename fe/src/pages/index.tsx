@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import Link from "next/link";
 import InventoryTable from "../components/InventoryTable";
-import StockInTable from "../components/StockInTable";
 import StockOutTable from "../components/StockOutTable";
 import AlertsTable from "../components/AlertsTable";
 import MonthlyChart from "../components/MonthlyChart";
@@ -13,25 +12,19 @@ import {
   AlertItem,
   TotalInventoryItem,
 } from "../types";
-import StockInList from "@/components/StockInList";
+import { Plus } from "lucide-react";
 
 export default function DashboardPage() {
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
-  const [stockIn, setStockIn] = useState<StockInItem[]>([]);
   const [stockOut, setStockOut] = useState<StockOutItem[]>([]);
   const [alerts, setAlerts] = useState<AlertItem[]>([]);
-  const [totalInventory, setTotalInventory] = useState<TotalInventoryItem[]>(
-    []
-  );
+  const [totalInventory, setTotalInventory] = useState<TotalInventoryItem[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const invRes = await api.get<InventoryItem[]>("/inventory");
         setInventory(invRes.data);
-
-        const stockInRes = await api.get<StockInItem[]>("/stock-in?limit=5");
-        setStockIn(stockInRes.data);
 
         const stockOutRes = await api.get<StockOutItem[]>("/stock-out?limit=5");
         setStockOut(stockOutRes.data);
@@ -52,46 +45,73 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>QLKho Dashboard</h1>
+    <div className="container max-w-[1200px] mx-auto py-[32px]">
+      {/* Tiêu đề chính */}
+      <h1 className="text-center text-[28px] font-[800] mb-[32px] text-[#7B68EE] tracking-[1px] drop-shadow-sm">
+        📦 Kho Trúc Anh
+      </h1>
 
-      {/* 👇 thêm button điều hướng */}
-      <div style={{ marginTop: 20, marginBottom: 20 }}>
-        <Link href="/stock-in/StockInPage">
-          <button
-            style={{
-              backgroundColor: "#2563eb",
-              color: "white",
-              padding: "8px 16px",
-              borderRadius: "8px",
-              border: "none",
-              cursor: "pointer",
-            }}
-          >
-            ➕ Tạo phiếu nhập kho
-          </button>
+      {/* Button điều hướng */}
+      <div className="mb-[28px] flex justify-end">
+        <Link
+          href="/stock-in/StockInPage"
+          className="no-underline flex items-center px-[16px] py-[10px] rounded-[6px] bg-[#2563EB] hover:bg-[#1D4ED8] text-[#ffffff] font-[600] text-[15px] shadow-[0_2px_6px_rgba(37,99,235,0.25)] transition-all"
+        >
+          <Plus size={18} className="mr-[6px] text-[#ffffff]" />
+          Tạo phiếu nhập kho
         </Link>
       </div>
 
-      <section style={{ marginTop: 20 }}>
-        <h2>Tồn kho</h2>
-        <InventoryTable data={inventory} />
-      </section>
+      {/* Các section */}
+      <div className="flex flex-col gap-[28px]">
+        {/* Tồn kho */}
+        <section className="bg-[#ffffff] rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] border border-[#E5E7EB] overflow-hidden">
+          <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[24px] py-[14px]">
+            <h2 className="text-[20px] font-[700] text-[#ffffff] m-0">
+              📋 Tồn kho
+            </h2>
+          </div>
+          <div className="p-[24px]">
+            <InventoryTable data={inventory} />
+          </div>
+        </section>
 
-      <section style={{ marginTop: 20 }}>
-        <h2>Sản phẩm xuất kho</h2>
-        <StockOutTable data={stockOut} />
-      </section>
+        {/* Sản phẩm xuất kho */}
+        <section className="bg-[#ffffff] rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] border border-[#E5E7EB] overflow-hidden">
+          <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[24px] py-[14px]">
+            <h2 className="text-[20px] font-[700] text-[#ffffff] m-0">
+              📤 Sản phẩm xuất kho
+            </h2>
+          </div>
+          <div className="p-[24px]">
+            <StockOutTable data={stockOut} />
+          </div>
+        </section>
 
-      <section style={{ marginTop: 20 }}>
-        <h2>Tồn kho thấp</h2>
-        <AlertsTable data={alerts} />
-      </section>
+        {/* Tồn kho thấp */}
+        <section className="bg-[#ffffff] rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] border border-[#E5E7EB] overflow-hidden">
+          <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[24px] py-[14px]">
+            <h2 className="text-[20px] font-[700] text-[#ffffff] m-0">
+              ⚠️ Tồn kho thấp
+            </h2>
+          </div>
+          <div className="p-[24px]">
+            <AlertsTable data={alerts} />
+          </div>
+        </section>
 
-      <section style={{ marginTop: 40 }}>
-        <h2>Tổng sản phảm tồn kho</h2>
-        <MonthlyChart data={totalInventory} />
-      </section>
+        {/* Tổng sản phẩm tồn kho */}
+        <section className="bg-[#ffffff] rounded-[16px] shadow-[0_4px_24px_rgba(0,0,0,0.05)] border border-[#E5E7EB] overflow-hidden">
+          <div className="bg-gradient-to-r from-[#7B68EE] to-[#9370DB] px-[24px] py-[14px]">
+            <h2 className="text-[20px] font-[700] text-[#ffffff] m-0">
+              📊 Tổng sản phẩm tồn kho
+            </h2>
+          </div>
+          <div className="p-[24px]">
+            <MonthlyChart data={totalInventory} />
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

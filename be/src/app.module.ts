@@ -24,7 +24,7 @@ import { ManufacturersModule } from './manufacturers/manufacturers.module';
       host: 'localhost',
       port: 5432,
       username: 'postgres',
-      password: '0000',
+      password: '123456',
       database: 'KhoDB',
       synchronize: true,
       logging: true,

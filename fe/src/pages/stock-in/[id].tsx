@@ -66,7 +66,7 @@ export default function DetailStockIn() {
     setFormData({
       ...formData,
       [name]: ["product_id", "warehouse_id", "from_manufacturer"].includes(name)
-        ? Number(value) // Ép kiểu number cho select
+        ? Number(value)
         : value,
     });
   };
@@ -85,75 +85,84 @@ export default function DetailStockIn() {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Sửa phiếu nhập</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <select
-          name="product_id"
-          value={formData.product_id}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        >
-          {products.map((p) => (
-            <option key={p.product_id} value={p.product_id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
+    <div className="container max-w-[600px] mx-auto mt-[32px]">
+      <section className="bg-[#ffffff] rounded-[16px] shadow p-[24px]">
+        <h1 className="text-center text-[24px] font-[600] mb-[24px] text-[#7B68EE]">
+          Sửa phiếu nhập kho
+        </h1>
 
-        <select
-          name="warehouse_id"
-          value={formData.warehouse_id}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          required
-        >
-          {warehouses.map((w) => (
-            <option key={w.warehouse_id} value={w.warehouse_id}>
-              {w.name}
-            </option>
-          ))}
-        </select>
+        <form onSubmit={handleSubmit} className="space-y-[16px]">
+          <select
+            name="product_id"
+            value={formData.product_id}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            required
+          >
+            <option value={0}>-- Chọn sản phẩm --</option>
+            {products.map((p) => (
+              <option key={p.product_id} value={p.product_id}>
+                {p.name}
+              </option>
+            ))}
+          </select>
 
-        <input
-          type="number"
-          name="quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-          min={1}
-          required
-        />
+          <select
+            name="warehouse_id"
+            value={formData.warehouse_id}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            required
+          >
+            <option value={0}>-- Chọn kho --</option>
+            {warehouses.map((w) => (
+              <option key={w.warehouse_id} value={w.warehouse_id}>
+                {w.name}
+              </option>
+            ))}
+          </select>
 
-        <select
-          name="from_manufacturer"
-          value={formData.from_manufacturer}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        >
-          {manufacturers.map((m) => (
-            <option key={m.manufacturer_id} value={m.manufacturer_id}>
-              {m.name}
-            </option>
-          ))}
-        </select>
+          <input
+            type="number"
+            name="quantity"
+            value={formData.quantity}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+            min={1}
+            required
+          />
 
-        <input
-          type="text"
-          name="note"
-          value={formData.note}
-          onChange={handleChange}
-          className="w-full border p-2 rounded"
-        />
+          <select
+            name="from_manufacturer"
+            value={formData.from_manufacturer}
+            onChange={handleChange}
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+          >
+            <option value={0}>-- Nhà sản xuất --</option>
+            {manufacturers.map((m) => (
+              <option key={m.manufacturer_id} value={m.manufacturer_id}>
+                {m.name}
+              </option>
+            ))}
+          </select>
 
-        <button
-          type="submit"
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Cập nhật
-        </button>
-      </form>
+          <input
+            type="text"
+            name="note"
+            value={formData.note}
+            onChange={handleChange}
+            placeholder="Ghi chú..."
+            className="w-full border border-[#d1d5db] p-[12px] rounded-[8px] text-[14px]"
+          />
+
+          <button
+            type="submit"
+            className="bg-[#059669] hover:bg-[#047857] text-[#ffffff] px-[16px] py-[10px] rounded-[8px] text-[15px] font-[500] cursor-pointer"
+          >
+            Cập nhật
+          </button>
+        </form>
+      </section>
     </div>
   );
 }
